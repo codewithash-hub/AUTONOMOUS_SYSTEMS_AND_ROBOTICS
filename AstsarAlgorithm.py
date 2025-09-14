@@ -2,25 +2,25 @@ import heapq
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Hueristic function: Manhattan distance
-def heuristic(a, b):
+# Hueristic Function: Manhattan distance
+def hueristic(a, b):
     return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
-# A* Algorithm
+
+# A* algorithm
 def astar(grid, start, goal):
     rows, cols = len(grid), len(grid[0])
     open_list = []
-    heapq.heappush(open_list, (0, start)) # (f-score, node)
+    heapq.heappush(open_list, (0, start))
     came_from = {}
     g_score = {start: 0}
-    f_score = {start: heuristic(start, goal)}
+    f_score = {start: hueristic(start, goal)}
     visited = set()
 
     while open_list:
-        _, current = heapq.heappop(open_list)
+        _,current = heapq.heappop(open_list)
 
         if current == goal:
-            # Reconstruct path
             path = []
             while current in came_from:
                 path.append(current)
@@ -44,32 +44,32 @@ def astar(grid, start, goal):
                 if neighbor not in g_score or tentative_g < g_score[neighbor]:
                     came_from[neighbor] = current
                     g_score[neighbor] = tentative_g
-                    f_score[neighbor] = tentative_g + heuristic(neighbor, goal)
+                    f_score[neighbor] = tentative_g + hueristic(neighbor, goal)
                     heapq.heappush(open_list, (f_score[neighbor], neighbor))
-
+    
     return None, visited
 
 
-# Create 10x10 grid (0=free, 1=obstacle)
+# Create a 10x10 grid (0=free, 1=obstacle)
 grid = np.zeros((10, 10), dtype=int)
 
-# Draw obstacles
-grid[3, 3:7] = 1
-grid[6, 1:5] = 1
+# Draw grid
+grid[3, 1:5] = 1
+grid[6, 3:7] = 1
 grid[1:5, 8] = 1
 
-# Get user input for start and goal
+# Get user input for start and goal position
 start = tuple(map(int, input("Enter start position (row col): ").split()))
 goal = tuple(map(int, input("Enter goal position (row col): ").split()))
 
-# Run A* algotithm
+# Run A* algorithm
 path, visited = astar(grid, start, goal)
 
-# Visualization
+# Visualize 
 fig, ax = plt.subplots()
 ax.imshow(grid, cmap="Greys", origin="upper")
 
-# Mark visisted nodes
+# Mark visited
 for (r, c) in visited:
     ax.scatter(c, r, marker=".", color="yellow")
 
@@ -78,11 +78,11 @@ if path:
     for (r, c) in path:
         ax.scatter(c, r, marker="o", color="blue")
 else:
-    print("no path found!")
+    print("no path found")
 
 # Mark start and goal
-ax.scatter(start[1], start[0], marker="s", color="green", s=100, label="Start")
-ax.scatter(goal[1], goal[0], marker="s", color="red", s=100, label="Goal")
+ax.scatter(start[1], start[0], marker="s", s=100, label="Start")
+ax.scatter(goal[1], goal[0], marker="s", s=100, label="Goal")
 
 ax.set_xticks(np.arange(-0.5, 10, 1), minor=True)
 ax.set_yticks(np.arange(-0.5, 10, 1), minor=True)

@@ -44,35 +44,31 @@ def cast_ray(angle):
     return px, py # no collision, return max range
 
 
-def main():
-    clock = pygame.time.Clock()
-    run = True
 
-    while run:
-        clock.tick(60)
-        window.fill(BLACK)
+clock = pygame.time.Clock()
+run = True
 
-        # draw walls
-        for wall in walls:
-            pygame.draw.rect(window, WHITE, wall)
+while run:
+    clock.tick(60)
+    window.fill(BLACK)
 
-        # Draw LiDAR sensor
-        pygame.draw.circle(window, RED, (lidar_x, lidar_y), 5)
+    # draw walls
+    for wall in walls:
+        pygame.draw.rect(window, WHITE, wall)
 
-        # Cast rays
-        for i in range(num_rays):
-            angle = math.radians(i)
-            hit_point = cast_ray(angle)
-            pygame.draw.line(window, RED, (lidar_x, lidar_y), hit_point, 1)
-            pygame.draw.circle(window, RED, hit_point, 2)
+    # Draw LiDAR sensor
+    pygame.draw.circle(window, RED, (lidar_x, lidar_y), 5)
 
-        # Event handling
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
+    # Cast rays
+    for i in range(num_rays):
+        angle = math.radians(i)
+        hit_point = cast_ray(angle)
+        pygame.draw.line(window, RED, (lidar_x, lidar_y), hit_point, 1)
+        pygame.draw.circle(window, RED, hit_point, 2)
 
-        pygame.display.update()
+    # Event handling
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
 
-
-if __name__ == '__main__':
-    main()
+    pygame.display.update()
